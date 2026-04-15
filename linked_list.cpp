@@ -1,13 +1,13 @@
 #include <iostream>
+#include <string>
 
-// 使用模板以支持不同类型
 template <typename T>
 class LinkedList {
 private:
-    // 内部节点结构
     struct Node {
         T data;
         Node* next;
+
         Node(const T& value) : data(value), next(nullptr) {}
     };
 
@@ -15,34 +15,31 @@ private:
     int size;
 
 public:
-    //构造函数
-    LinkedList() : head(nullptr), size(0) {
-        std::cout << "LinkedList created" << std::endl;
-    }
-
-    //析构函数
+    LinkedList() : head(nullptr), size(0) {}
     ~LinkedList() {
         clear();
-        std::cout << "LinkedList destroyed" << std::endl;
     }
 
-    void push_front(const T& value);
-    void del_front();
+    void pushHead(const T& value);
+    void deleteHead();
     void clear();
-    void print() const;
+    int getSize() const;
+    void printList() const;
 };
 
 template <typename T>
-void LinkedList<T>::push_front(const T& value) {
+void LinkedList<T>::pushHead(const T& value) {
     Node* newNode = new Node(value);
+
     newNode->next = head;
     head = newNode;
     size++;
 }
 
 template <typename T>
-void LinkedList<T>::del_front() {
+void LinkedList<T>::deleteHead() {
     if (!head) return;
+
     Node* temp = head;
     head = head->next;
     delete temp;
@@ -51,13 +48,18 @@ void LinkedList<T>::del_front() {
 
 template <typename T>
 void LinkedList<T>::clear() {
-    while(head) {
-        del_front();
+    while (head) {
+        deleteHead();
     }
 }
 
 template <typename T>
-void LinkedList<T>::print() const {
+int LinkedList<T>::getSize() const {
+    return size;
+}
+
+template <typename T>
+void LinkedList<T>::printList() const {
     Node* current = head;
     while (current) {
         std::cout << current->data << " -> ";
@@ -66,22 +68,30 @@ void LinkedList<T>::print() const {
     std::cout << "nullptr" << std::endl;
 }
 
-int main(int argc, char **argv) {
-    LinkedList<int> List_int;
+int main(int argc, char** argv) {
+    LinkedList<std::string> list;
+    list.pushHead("Make");
+    list.pushHead("Dreams");
+    list.pushHead("Reality");
 
-    List_int.push_front(11);
-    List_int.push_front(22);
-    List_int.push_front(33);
+    std::cout << "Linked List size: " << list.getSize() << std::endl;
+    list.printList();
 
-    List_int.print();
+    LinkedList<int> intList;
+    intList.pushHead(1);
+    intList.pushHead(2);
+    intList.pushHead(3);
 
-    LinkedList<std::string> List_string;
-    List_string.push_front("Hello");
-    List_string.push_front("World");
-    List_string.push_front("and");
-    List_string.push_front("Enjoy");
+    std::cout << "Integer Linked List size: " << intList.getSize() << std::endl;
+    intList.printList();
 
-    List_string.print();
+    LinkedList<double> doubleList;
+    doubleList.pushHead(1.1);
+    doubleList.pushHead(2.2);
+    doubleList.pushHead(3.3);
+
+    std::cout << "Double Linked List size: " << doubleList.getSize() << std::endl;
+    doubleList.printList();
 
     return 0;
 }
